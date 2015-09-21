@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FurnituraNatali</string>
+    <string name="settings_btn">Settings</string>
 </resources>
