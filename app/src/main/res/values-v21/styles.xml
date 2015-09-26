@@ -5,5 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorControlNormal">@color/colorDefWhite</item>
+
     </style>
-</resources>
+
+ </resources>

@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name">Фурнитура "Натали"</string>
-    <string name="str_settings">Settings</string>
+
+    <string name="toggle_open">Open</string>
+    <string name="toggle_close">Close</string>
+
+    <string name="str_settings">Настройки</string>
     <string name="str_search">Поиск</string>
     <string name="str_exit">Выход</string>
-    <string name="str_item1">Лента атласная с рисунком</string>
-    <string name="str_item0">Лента атласная</string>
+    <string name="str_item0">Загрузка данных…</string>
+    <string name="str_web">Перейти на сайт</string>
 </resources>
+
+
