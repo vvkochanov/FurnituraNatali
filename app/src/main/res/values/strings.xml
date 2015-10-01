@@ -9,6 +9,9 @@
     <string name="str_exit">Выход</string>
     <string name="str_item0">Загрузка данных…</string>
     <string name="str_web">Перейти на сайт</string>
+    <string name="str_navview_headlogo">NavViewLogo</string>
+    <string name="str_navview_headcaption">Каталог товаров</string>
+    <string name="str_card_text">Текст карточки</string>
 </resources>
 
 

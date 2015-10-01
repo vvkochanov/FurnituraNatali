@@ -2,14 +2,17 @@ package ru.furnituranatali.app;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.View;
 import android.widget.Toast;
 
 /**
@@ -20,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int MAIN_LAYOUT = R.layout.activity_main;
     private Toolbar main_toolbar;
     private DrawerLayout  drawerLayout;
+    private RecyclerView mRecycleView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutMgr;
+//    private RecyclerView.ItemAnimator mItemAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         InitToolbar();
         InitNavView();
+        InitGridList();
     }
 
     private void InitToolbar() {
@@ -55,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//инициализация NavigationView - выплывающего меню слева 
+//инициализация NavigationView - выплывающего меню слева
     private void InitNavView() {
         drawerLayout =(DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -68,7 +76,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                drawerLayout.closeDrawers();
+                if (menuItem.getSubMenu() == null)
+                    drawerLayout.closeDrawers();
+//                else
+//                    menuItem.
 //                далее будет вызов активити, которое отобразит соответсвующие подкатегории товаров либо товары соотсетствующей категории/подкатегории
 
                 Context context = getApplicationContext();
@@ -78,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         Menu leftNavMenu = navigationView.getMenu();
-        leftNavMenu.getItem(0).setTitle("ЛЕНТА АТЛАСНАЯ");
-        leftNavMenu.add("ЛЕНТА АТЛАСНАЯ С РИСУНКОМ");
+        MenuItem menuItem = leftNavMenu.getItem(0).setTitle("Лента атласная");
+
+        leftNavMenu.add("Лента атласная с рисунком");
         leftNavMenu.add("ЛЕНТЫ РЕПСОВЫЕ");
         leftNavMenu.add("ЛЕНТА ДЕКОРАТИВНАЯ");
         leftNavMenu.add("ОРГАНЗА");
@@ -104,6 +116,28 @@ public class MainActivity extends AppCompatActivity {
             leftNavMenu.getItem(i).setIcon(R.mipmap.ic_checkbox_blank_circle);
         }
     }
+// Инициализация Grid List состоящим из карточек категорий
+    private void InitGridList() {
+        String[] textsDataSet= {
+          "Адын!", "Дыва!", "Тыры!", "Читыры!", "Пать!", "Шест!", "Сэм!", "Восэм!"
+        };
+        mRecycleView = (RecyclerView) findViewById(R.id.recycle_grid_layout);
+        mRecycleView.setHasFixedSize(true);
 
+        mLayoutMgr = new GridLayoutManager(this, 2);
+        mRecycleView.setLayoutManager(mLayoutMgr);
+
+        mAdapter = new MainAdapter(textsDataSet);
+//        mAdapter = new TestAdapter(textsDataSet);
+        mRecycleView.setAdapter(mAdapter);
+    }
+//    обработчик событий OnClick на карточку
+    public void sendCardMsg(View v){
+        Toast.makeText(getApplicationContext(), "Click on Card", Toast.LENGTH_SHORT).show();
+    }
+    //    обработчик событий OnClick на нижний фрейм в карточке
+    public void sendFrmMsg(View v){
+        Toast.makeText(getApplicationContext(), "Click on Frame", Toast.LENGTH_SHORT).show();
+    }
 }
 

@@ -13,21 +13,28 @@
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            >
             <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/main_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:elevation="4dp"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:theme="@style/AppBarTheme"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 >
             </android.support.v7.widget.Toolbar>
 
-
         </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_grid_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:layout_marginTop="?attr/actionBarSize"
+            >
+        </android.support.v7.widget.RecyclerView>
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -39,4 +46,6 @@
         app:menu="@menu/menu_navigation"
         app:headerLayout="@layout/navigation_header"
         />
+
+
 </android.support.v4.widget.DrawerLayout>
