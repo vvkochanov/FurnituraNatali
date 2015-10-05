@@ -11,4 +11,9 @@
     <style name="AppBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <!--<item name="elevation">4dp</item>-->
     </style>
+  <style name="SplashTheme" parent="AppDefault">
+        <item name="android:background">@drawable/splash_background</item>
+    </style>
+
+
 </resources>

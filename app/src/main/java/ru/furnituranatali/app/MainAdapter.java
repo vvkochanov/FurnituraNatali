@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by Vavan on 27.09.2015.
  */
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
-private String[] mDataset;
+    private List<CardData> mCards;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -23,8 +25,8 @@ private String[] mDataset;
         }
     }
 
-    public MainAdapter(String[] textDataSet) {
-        mDataset = textDataSet;
+    public MainAdapter(List<CardData> mCards) {
+        this.mCards = mCards;
     }
 
     @Override
@@ -39,11 +41,11 @@ private String[] mDataset;
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         TextView txt_v = (TextView) holder.mCard.findViewById(R.id.textViewOfCard);
-        txt_v.setText(String.format(mDataset[position], position));
+        txt_v.setText(mCards.get(position).getCaption());
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mCards.size();
     }
 }

@@ -15,6 +15,11 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static ru.furnituranatali.app.Common.*;
+
 /**
  * Created by Vavan on 20.09.2015.
  */
@@ -34,9 +39,62 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(MAIN_LAYOUT);
 
+// инициализируем внутренний класс, который содержит всю необходимую инфу по каталожным и товарным карточкам
+        InitCardData();
+// инициализация ActionBar
         InitToolbar();
+// инициализация Navigation Drawer. При этом передаются данные для левого меню из глоб. перем. catalog
         InitNavView();
+// инициализация вывода карточек корневого каталога, данные берутся из catalog
         InitGridList();
+    }
+
+    private void InitCardData() {
+        String[] cats = {
+                "Лента атласная",
+                "Лента атласная с рисунком",
+                "Ленты репсовые",
+                "Лента декоративная",
+                "Органза",
+                "Парча",
+                "Тейп ленты",
+                "Тычинки",
+                "Термоаппликации",
+                "Кружево",
+                "Кабошоны-серединки",
+                "Бусины-полубусины",
+                "Стразы",
+                "Фоамиран",
+                "Флористика",
+                "Фетр",
+                "Пенопластовые основы",
+                "Шнуры и нити.",
+                "Аксессуары для волос",
+                "Металлофурнитура и пластик",
+                "Инструмент для рукоделия",
+                "Изделия ручной работы"
+        };
+        catalog = new ArrayList<CardData>();
+        for (int i = 0; i < cats.length; i++){
+            catalog.add(new CardData(false));
+            catalog.get(i).setCaption(cats[i]);
+            switch (i){
+                case 0:
+                    for (int j = 0; j < 9; j++) {
+                        CardData child = new CardData(false);
+                        catalog.get(i).addChild(child);
+                        child.setCaption(String.format("ПодКаталог $d", j));
+                    }
+                    break;
+                case 3:
+                    for (int j = 0; j < 2; j++) {
+                        CardData child = new CardData(false);
+                        catalog.get(i).addChild(child);
+                        child.setCaption(String.format("ПодКаталог $d", j));
+                    }
+            }
+        }
+//        curCatalogItem = catalog.get(0);
     }
 
     private void InitToolbar() {
@@ -76,45 +134,47 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                if (menuItem.getSubMenu() == null)
-                    drawerLayout.closeDrawers();
-//                else
-//                    menuItem.
-//                далее будет вызов активити, которое отобразит соответсвующие подкатегории товаров либо товары соотсетствующей категории/подкатегории
-
+                drawerLayout.closeDrawers();
+//                далее будет вызов активити, которое отобразит соответсвующие подкатегории товаров либо товары соответствующей категории/подкатегории
+//                mAdapter.bindViewHolder();
                 Context context = getApplicationContext();
                 CharSequence disp_text = "Выбран - " + menuItem.getTitle();
                 Toast.makeText(context, disp_text, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
-        Menu leftNavMenu = navigationView.getMenu();
-        MenuItem menuItem = leftNavMenu.getItem(0).setTitle("Лента атласная");
 
-        leftNavMenu.add("Лента атласная с рисунком");
-        leftNavMenu.add("ЛЕНТЫ РЕПСОВЫЕ");
-        leftNavMenu.add("ЛЕНТА ДЕКОРАТИВНАЯ");
-        leftNavMenu.add("ОРГАНЗА");
-        leftNavMenu.add("ПАРЧА");
-        leftNavMenu.add("ТЕЙП ЛЕНТЫ");
-        leftNavMenu.add("ТЫЧИНКИ");
-        leftNavMenu.add("ТЕРМОАППЛИКАЦИИ");
-        leftNavMenu.add("КРУЖЕВО");
-        leftNavMenu.add("КАБОШОНЫ-СЕРЕДИНКИ");
-        leftNavMenu.add("БУСИНЫ-ПОЛУБУСИНЫ");
-        leftNavMenu.add("СТРАЗЫ");
-        leftNavMenu.add("ФОАМИРАН");
-        leftNavMenu.add("ФЛОРИСТИКА");
-        leftNavMenu.add("ФЕТР");
-        leftNavMenu.add("ПЕНОПЛАСТОВЫЕ ОСНОВЫ");
-        leftNavMenu.add("ШНУРЫ И НИТИ.");
-        leftNavMenu.add("АКСЕССУАРЫ ДЛЯ ВОЛОС");
-        leftNavMenu.add("МЕТАЛЛОФУРНИТУРА И ПЛАСТИК");
-        leftNavMenu.add("ИНСТРУМЕНТ ДЛЯ РУКОДЕЛИЯ");
-        leftNavMenu.add("ИЗДЕЛИЯ РУЧНОЙ РАБОТЫ");
-        for (int i = 0; i < leftNavMenu.size(); i++){
+        Menu leftNavMenu = navigationView.getMenu();
+        MenuItem menuItem = leftNavMenu.getItem(0).setTitle(catalog.get(0).getCaption());//"Лента атласная");
+
+        for (int i = 1; i < catalog.size(); i++){
+            leftNavMenu.add(catalog.get(i).getCaption());
             leftNavMenu.getItem(i).setIcon(R.mipmap.ic_checkbox_blank_circle);
         }
+//        leftNavMenu.add("Лента атласная с рисунком");
+//        leftNavMenu.add("ЛЕНТЫ РЕПСОВЫЕ");
+//        leftNavMenu.add("ЛЕНТА ДЕКОРАТИВНАЯ");
+//        leftNavMenu.add("ОРГАНЗА");
+//        leftNavMenu.add("ПАРЧА");
+//        leftNavMenu.add("ТЕЙП ЛЕНТЫ");
+//        leftNavMenu.add("ТЫЧИНКИ");
+//        leftNavMenu.add("ТЕРМОАППЛИКАЦИИ");
+//        leftNavMenu.add("КРУЖЕВО");
+//        leftNavMenu.add("КАБОШОНЫ-СЕРЕДИНКИ");
+//        leftNavMenu.add("БУСИНЫ-ПОЛУБУСИНЫ");
+//        leftNavMenu.add("СТРАЗЫ");
+//        leftNavMenu.add("ФОАМИРАН");
+//        leftNavMenu.add("ФЛОРИСТИКА");
+//        leftNavMenu.add("ФЕТР");
+//        leftNavMenu.add("ПЕНОПЛАСТОВЫЕ ОСНОВЫ");
+//        leftNavMenu.add("ШНУРЫ И НИТИ.");
+//        leftNavMenu.add("АКСЕССУАРЫ ДЛЯ ВОЛОС");
+//        leftNavMenu.add("МЕТАЛЛОФУРНИТУРА И ПЛАСТИК");
+//        leftNavMenu.add("ИНСТРУМЕНТ ДЛЯ РУКОДЕЛИЯ");
+//        leftNavMenu.add("ИЗДЕЛИЯ РУЧНОЙ РАБОТЫ");
+//        for (int i = 0; i < leftNavMenu.size(); i++){
+//            leftNavMenu.getItem(i).setIcon(R.mipmap.ic_checkbox_blank_circle);
+//        }
     }
 // Инициализация Grid List состоящим из карточек категорий
     private void InitGridList() {
@@ -127,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         mLayoutMgr = new GridLayoutManager(this, 2);
         mRecycleView.setLayoutManager(mLayoutMgr);
 
-        mAdapter = new MainAdapter(textsDataSet);
+        mAdapter = new MainAdapter(catalog);
 //        mAdapter = new TestAdapter(textsDataSet);
         mRecycleView.setAdapter(mAdapter);
     }
@@ -139,5 +199,7 @@ public class MainActivity extends AppCompatActivity {
     public void sendFrmMsg(View v){
         Toast.makeText(getApplicationContext(), "Click on Frame", Toast.LENGTH_SHORT).show();
     }
+
+
 }
 
