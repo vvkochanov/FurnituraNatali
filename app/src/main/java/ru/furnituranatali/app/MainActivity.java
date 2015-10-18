@@ -2,6 +2,7 @@ package ru.furnituranatali.app;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(MAIN_LAYOUT);
 
+       // ArrayList<TestParcelable> data = getIntent().getParcelableArrayListExtra("TestParcel");
 // инициализируем внутренний класс, который содержит всю необходимую инфу по каталожным и товарным карточкам
         InitCardData();
 // инициализация ActionBar
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         InitNavView();
 // инициализация вывода карточек корневого каталога, данные берутся из catalog
         InitGridList();
+       // Toast.makeText(getApplicationContext(), "data: last elem. capt: " + data.get(data.size()-1).getCaption(), Toast.LENGTH_SHORT).show();
     }
 
     private void InitCardData() {
@@ -76,25 +79,19 @@ public class MainActivity extends AppCompatActivity {
         };
         catalog = new ArrayList<CardData>();
         for (int i = 0; i < cats.length; i++){
-            catalog.add(new CardData(false));
-            catalog.get(i).setCaption(cats[i]);
+            catalog.add(new CardData(false, cats[i]));
             switch (i){
                 case 0:
                     for (int j = 0; j < 9; j++) {
-                        CardData child = new CardData(false);
-                        catalog.get(i).addChild(child);
-                        child.setCaption(String.format("ПодКаталог $d", j));
+                         catalog.get(i).addChild(new CardData(false, String.format("ПодКаталог $d", j)));
                     }
                     break;
                 case 3:
                     for (int j = 0; j < 2; j++) {
-                        CardData child = new CardData(false);
-                        catalog.get(i).addChild(child);
-                        child.setCaption(String.format("ПодКаталог $d", j));
+                        catalog.get(i).addChild(new CardData(false, String.format("ПодКаталог $d", j)));
                     }
             }
         }
-//        curCatalogItem = catalog.get(0);
     }
 
     private void InitToolbar() {
@@ -151,30 +148,6 @@ public class MainActivity extends AppCompatActivity {
             leftNavMenu.add(catalog.get(i).getCaption());
             leftNavMenu.getItem(i).setIcon(R.mipmap.ic_checkbox_blank_circle);
         }
-//        leftNavMenu.add("Лента атласная с рисунком");
-//        leftNavMenu.add("ЛЕНТЫ РЕПСОВЫЕ");
-//        leftNavMenu.add("ЛЕНТА ДЕКОРАТИВНАЯ");
-//        leftNavMenu.add("ОРГАНЗА");
-//        leftNavMenu.add("ПАРЧА");
-//        leftNavMenu.add("ТЕЙП ЛЕНТЫ");
-//        leftNavMenu.add("ТЫЧИНКИ");
-//        leftNavMenu.add("ТЕРМОАППЛИКАЦИИ");
-//        leftNavMenu.add("КРУЖЕВО");
-//        leftNavMenu.add("КАБОШОНЫ-СЕРЕДИНКИ");
-//        leftNavMenu.add("БУСИНЫ-ПОЛУБУСИНЫ");
-//        leftNavMenu.add("СТРАЗЫ");
-//        leftNavMenu.add("ФОАМИРАН");
-//        leftNavMenu.add("ФЛОРИСТИКА");
-//        leftNavMenu.add("ФЕТР");
-//        leftNavMenu.add("ПЕНОПЛАСТОВЫЕ ОСНОВЫ");
-//        leftNavMenu.add("ШНУРЫ И НИТИ.");
-//        leftNavMenu.add("АКСЕССУАРЫ ДЛЯ ВОЛОС");
-//        leftNavMenu.add("МЕТАЛЛОФУРНИТУРА И ПЛАСТИК");
-//        leftNavMenu.add("ИНСТРУМЕНТ ДЛЯ РУКОДЕЛИЯ");
-//        leftNavMenu.add("ИЗДЕЛИЯ РУЧНОЙ РАБОТЫ");
-//        for (int i = 0; i < leftNavMenu.size(); i++){
-//            leftNavMenu.getItem(i).setIcon(R.mipmap.ic_checkbox_blank_circle);
-//        }
     }
 // Инициализация Grid List состоящим из карточек категорий
     private void InitGridList() {
@@ -188,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
         mRecycleView.setLayoutManager(mLayoutMgr);
 
         mAdapter = new MainAdapter(catalog);
-//        mAdapter = new TestAdapter(textsDataSet);
         mRecycleView.setAdapter(mAdapter);
     }
 //    обработчик событий OnClick на карточку

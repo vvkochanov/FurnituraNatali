@@ -10,6 +10,7 @@ import java.util.List;
 public class CardData {
     private String caption;
     private String captionLong;
+    private int id;
     private int article;
     private float price;
     private float sale;
@@ -17,9 +18,21 @@ public class CardData {
     private boolean isProduct;
     private CardData parentCard;
     private List<CardData> childCards;
+    private  boolean hasClosedTAG;
 
-    public CardData(boolean isProduct) {
+     public CardData(boolean isProduct, String caption) {
+         this(isProduct, 0, caption, null);
+    }
+     public CardData(boolean isProduct, int id, String caption) {
+         this(isProduct, id, caption, null);
+    }
+
+    public CardData( boolean isProduct, int id, String caption, String captionLong) {
         this.isProduct = isProduct;
+        this.id = id;
+        this.caption = caption;
+        this.captionLong = captionLong;
+        hasClosedTAG = true;
     }
 
     public void setCaption(String caption) {
@@ -36,17 +49,31 @@ public class CardData {
         this.count = count;
     }
 
+    public boolean isHasClosedTAG() {
+        return hasClosedTAG;
+    }
+
+    public void setClosedTAG(boolean hasClosedTAG) {
+        this.hasClosedTAG = hasClosedTAG;
+    }
+
     public void setParentCard(CardData parentCard) {
         this.parentCard = parentCard;
     }
 
     public void addChild(CardData childCard) {
         if (childCards == null) childCards = new ArrayList<CardData>();
+        childCard.setParentCard(this);
         childCards.add(childCard);
+
     }
 
     public int getChildCount() {
-        return childCards.size();
+        if(childCards != null) {
+            return childCards.size();
+        }else {
+            return  0;
+        }
     }
 
     public String getCaption() {
@@ -83,5 +110,9 @@ public class CardData {
 
     public List<CardData> getChildCards() {
         return childCards;
+    }
+
+    public int getID() {
+        return id;
     }
 }
