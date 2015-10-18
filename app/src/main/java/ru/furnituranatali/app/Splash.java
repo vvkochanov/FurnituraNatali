@@ -41,7 +41,7 @@ public class Splash extends AppCompatActivity {
         };
         splashThread.start();
     }
-    private String InitCardData() throws IOException {
+/**    private String InitCardData() throws IOException {
         String[] cats = {
                 "Лента атласная",
                 "Лента атласная с рисунком",
@@ -94,5 +94,5 @@ public class Splash extends AppCompatActivity {
             }
         }
         return parcebleList;
-    }
+    }*/
 }
