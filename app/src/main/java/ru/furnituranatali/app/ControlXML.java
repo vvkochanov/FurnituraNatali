@@ -26,6 +26,7 @@ import java.net.URL;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.xmlpull.v1.*;
 
 
 // определяем класс, который будет связывать XML-файл структуры каталога с остальной программой
@@ -97,7 +98,8 @@ public class ControlXML extends Object{
         // записывая в него начальные данные
         try {
             fromFile();
-        } catch (IOException e) {
+		} catch (XmlPullParserException e) {} 
+		catch (IOException e) {
             Log.e(TAG, "constructor ControlXML: read from file", e);
             try {
                 toFile();
@@ -202,7 +204,7 @@ public class ControlXML extends Object{
 
     }
     // получаем данные из XML-файла и парсим их, сохраняя данные в поле catalog
-    public void fromFile() throws IOException {
+    public void fromFile() throws IOException, XmlPullParserException {
         FileInputStream inputXML;
 
         inputXML = context.openFileInput(XML_FILENAME);
@@ -215,6 +217,10 @@ public class ControlXML extends Object{
         while ((s = reader.readLine())!= null) {buffer.append(s + "\n");}
         contentXML = buffer.toString();
         inputXML.close();
+		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+		factory.setNamespaceAware(true);
+		XmlPullParser parser = factory.newPullParser();
+		parsingXML(parser);
     }
 
     public String getContentXML() {

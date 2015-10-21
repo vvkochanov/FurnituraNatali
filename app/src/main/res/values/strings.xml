@@ -14,6 +14,7 @@
     <string name="str_card_text">Текст карточки</string>
     <string name="str_web_site_http">http://furnituranatali.ru/products</string>
     <string name="str_web_site_text">Каталог товара</string>
+	<string name="str_extra_content_xml">ru.furnitura.contentXML</string>
 </resources>
 
 

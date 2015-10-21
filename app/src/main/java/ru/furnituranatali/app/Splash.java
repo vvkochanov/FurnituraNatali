@@ -14,6 +14,8 @@ import static ru.furnituranatali.app.Common.catalog;
 public class Splash extends AppCompatActivity {
 
     private static final String TAG = "FN_App: Splash";
+	private String contentXML;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.SplashTheme);
@@ -25,14 +27,15 @@ public class Splash extends AppCompatActivity {
                 try {
                     synchronized (this){
                        long t_start = System.currentTimeMillis();
-//                        String s = InitCardData();
+						contentXML = InitCardData();
                         long t_delta = System.currentTimeMillis() - t_start;
                         Log.i(TAG, "OnCreate: run: controlXML.getContentXML(): time to write: " + String.valueOf(t_delta));
                         wait(5);
                     }
-                }catch (InterruptedException e){} finally {
+                }catch (InterruptedException e){} 
+				finally {
                     Intent intent = new Intent();
-                   // intent.putParcelableArrayListExtra("TestParcel",TestProc());
+                    intent.putExtra(getString(R.string.str_extra_content_xml),contentXML);
                     intent.setClass(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -41,7 +44,8 @@ public class Splash extends AppCompatActivity {
         };
         splashThread.start();
     }
-/**    private String InitCardData() throws IOException {
+	
+	private String InitCardData()  {
         String[] cats = {
                 "Лента атласная",
                 "Лента атласная с рисунком",
@@ -82,6 +86,7 @@ public class Splash extends AppCompatActivity {
         controlXML.setCatalog(catalog, true);
         return  controlXML.getContentXML();
     }
+	/**
     ArrayList<TestParcelable> TestProc(){
         ArrayList<TestParcelable> parcebleList = new ArrayList<>();
         for (int i = 0; i < 1; i++){
