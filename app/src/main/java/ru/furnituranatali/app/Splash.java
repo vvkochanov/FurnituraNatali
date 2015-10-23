@@ -24,10 +24,19 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
                 super.run();
+
+// --------------- ОПИСАНИЕ ЛОГИКИ ----------------------
+//       Создается / открывается БД (класс SQL_Helper или его обертка)
+//       Читаются данные из таблицы (проверочный(ые) код(ы))
+//       Вычисляются проверочные коды из содержимого сайта
+//       Если коды совпадают или невозможно получить данные из сети, данное активити передает управление MainActivity
+//       Если коды не совпадают и  сайт доступен, происходит вычисление и загрузка различающихся данных в локальную базу
+//       Далее переход к MainActivity
                 try {
                     synchronized (this){
                        long t_start = System.currentTimeMillis();
 						contentXML = InitCardData();
+                        Log.i(TAG, String.format("OnCreate: run: contentXML.size = %d", contentXML.length()));
                         long t_delta = System.currentTimeMillis() - t_start;
                         Log.i(TAG, "OnCreate: run: controlXML.getContentXML(): time to write: " + String.valueOf(t_delta));
                         wait(5);
@@ -35,7 +44,7 @@ public class Splash extends AppCompatActivity {
                 }catch (InterruptedException e){} 
 				finally {
                     Intent intent = new Intent();
-                    intent.putExtra(getString(R.string.str_extra_content_xml),contentXML);
+                    intent.putExtra(getString(R.string.str_extra_content_xml), contentXML);
                     intent.setClass(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -70,12 +79,14 @@ public class Splash extends AppCompatActivity {
                 "Инструмент для рукоделия",
                 "Изделия ручной работы"
         };
+
         ControlXML controlXML = new ControlXML(getApplicationContext());
         Log.i(TAG, "InitCardData: controlXML.getContentXML():\n" + controlXML.getContentXML());
+
         catalog = new ArrayList<>();
         for (int i = 0; i < cats.length; i++){
             catalog.add(new CardData(false, i, cats[i]));
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < 11; j++) {
                 CardData prod = new CardData(false, j, String.format("ПодКаталог %d", j));
                 catalog.get(i).addChild(prod);
                 for (int k = 0; k < 50; k++){

@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecycleView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutMgr;
+    private ControlXML controlXML;
 //    private RecyclerView.ItemAnimator mItemAnimator;
 
     @Override
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(MAIN_LAYOUT);
 
+        controlXML = new ControlXML(getApplicationContext());
+        controlXML.setContentXML(getIntent().getStringExtra(getString(R.string.str_extra_content_xml)));
        // ArrayList<TestParcelable> data = getIntent().getParcelableArrayListExtra("TestParcel");
 // инициализируем внутренний класс, который содержит всю необходимую инфу по каталожным и товарным карточкам
         InitCardData();

@@ -112,12 +112,14 @@ public class ControlXML extends Object{
     // сохраняем данные в XML-файл, если он не существует - создаем
     public void toFile() throws IOException {
         FileOutputStream outputXML;
-
+        StringWriter swr = new StringWriter();
         XmlSerializer xmlSerializer = Xml.newSerializer();
 
         outputXML = context.openFileOutput(XML_FILENAME, Context.MODE_PRIVATE);
 
         xmlSerializer.setOutput(outputXML, PROLOG_ENCODING);
+//        xmlSerializer.setOutput(swr);
+
         xmlSerializer.startDocument(PROLOG_ENCODING, Boolean.TRUE);
         xmlSerializer.text("\n");
         xmlSerializer.setPrefix(ROOT_PREF_HTML, ROOT_NS_HTML);
@@ -196,6 +198,9 @@ public class ControlXML extends Object{
         xmlSerializer.endTag(null, TAG_ROOT);
         xmlSerializer.endDocument();
 
+//        contentXML = swr.toString();
+
+//        outputXML.write(contentXML.getBytes());
         outputXML.close();
 
     }
@@ -239,6 +244,11 @@ public class ControlXML extends Object{
 
     public void setCatalog(List<CardData> catalog) {
         setCatalog(catalog, false);
+    }
+
+    public void setContentXML(String content) {
+        contentXML = content;
+        // далее следует код создания (если необходимо) и заполнения поля catalog
     }
     // внутренний класс для парсинга html
     private class ParseHTML {
