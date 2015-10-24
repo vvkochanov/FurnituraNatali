@@ -10,6 +10,7 @@ import android.provider.BaseColumns;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.*;
 
 /**
  * Created by Vavan on 23.10.2015.
@@ -28,6 +29,7 @@ public class ControlSQL {
     private static final String TBL_FIELD_SALE = "sale"; // type: real
 
     private static final String TBL_FIELD_CODE = "code"; // type: integer
+	private static final String TBL_FIELD_UPD_TIME = "update time"; // type date
     private static final String TBL_FIELD_COMMENT = "comment"; // type: text
 
     private static final String DB_TBL_CODES = "codes";
@@ -37,7 +39,9 @@ public class ControlSQL {
     private List<CardData> currentCardList;
     private int currentLevel;
     private int parentIdx;
-
+	private int updateCode;
+	private Date updateTime;
+	
     private SQL_Helper helper;
 //    private SQLiteDatabase catalogDB;
 
@@ -46,6 +50,12 @@ public class ControlSQL {
         helper = new SQL_Helper(context);
         currentLevel = 0;
         parentIdx = 0;
+		// проверяем наличие данных в таблице codes и если она пуста создаем начальные значения
+		SQLiteDatabase readDB = helper.getReadableDatabase();
+		Cursor cursor = readDB.query(DB_TBL_CODES, new String[] {TBL_FIELD_CODE, TBL_FIELD_UPD_TIME}, null, null, null, null, null);
+		if (cursor.getCount() == 0) {
+			
+		}
         SetCurrentCardList();
     }
 
@@ -53,6 +63,8 @@ public class ControlSQL {
         if (helper != null){
             SQLiteDatabase readCatalogDB = helper.getReadableDatabase();
             if (currentCardList == null) currentCardList = new ArrayList<>();
+			// выборка значений для текущего отображения, в соответствии с уровнем и выбранным элементом верхнего уровня (если есть)
+			
             String nameTable = DB_TBL_CATALOGS;
             if (currentLevel > 0 && parentIdx < currentCardList.size()) {
                 //нужно найти все значения в таблицах, связанные с индексом указанным в CardData
