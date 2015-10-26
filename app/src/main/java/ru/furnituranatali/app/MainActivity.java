@@ -2,7 +2,6 @@ package ru.furnituranatali.app;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -12,14 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static ru.furnituranatali.app.Common.*;
 
 /**
  * Created by Vavan on 20.09.2015.
@@ -32,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecycleView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutMgr;
-    private ControlXML controlXML;
+    private List<CardData> catalog;
 //    private RecyclerView.ItemAnimator mItemAnimator;
 
     @Override
@@ -41,9 +37,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(MAIN_LAYOUT);
 
-        controlXML = new ControlXML(getApplicationContext());
-        controlXML.setContentXML(getIntent().getStringExtra(getString(R.string.str_extra_content_xml)));
-       // ArrayList<TestParcelable> data = getIntent().getParcelableArrayListExtra("TestParcel");
 // инициализируем внутренний класс, который содержит всю необходимую инфу по каталожным и товарным карточкам
         InitCardData();
 // инициализация ActionBar
@@ -80,20 +73,9 @@ public class MainActivity extends AppCompatActivity {
                 "Инструмент для рукоделия",
                 "Изделия ручной работы"
         };
-        catalog = new ArrayList<CardData>();
+        catalog = new ArrayList<>();
         for (int i = 0; i < cats.length; i++){
-            catalog.add(new CardData(false, cats[i]));
-            switch (i){
-                case 0:
-                    for (int j = 0; j < 9; j++) {
-                         catalog.get(i).addChild(new CardData(false, String.format("ПодКаталог $d", j)));
-                    }
-                    break;
-                case 3:
-                    for (int j = 0; j < 2; j++) {
-                        catalog.get(i).addChild(new CardData(false, String.format("ПодКаталог $d", j)));
-                    }
-            }
+            catalog.add(new CardData.Set_ID_Caption(i, cats[i]).setChildCardsCount(2).build());
         }
     }
 
