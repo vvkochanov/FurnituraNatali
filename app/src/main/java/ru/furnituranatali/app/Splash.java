@@ -9,6 +9,8 @@ import android.util.Log;
 public class Splash extends AppCompatActivity {
 
     private static final String TAG = "FN_App: Splash";
+    private ControlSQL controlSQL;
+    private ControlHTML controlHTML;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,18 +20,19 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
                 super.run();
-
-// --------------- ОПИСАНИЕ ЛОГИКИ ----------------------
-//       Создается / открывается БД (класс SQL_Helper или его обертка)
-//       Читаются данные из таблицы (проверочный(ые) код(ы))
-//       Вычисляются проверочные коды из содержимого сайта
-//       Если коды совпадают или невозможно получить данные из сети, данное активити передает управление MainActivity
-//       Если коды не совпадают и  сайт доступен, происходит вычисление и загрузка различающихся данных в локальную базу
-//       Далее переход к MainActivity
+/**
+ *  --------------- ОПИСАНИЕ ЛОГИКИ ----------------------
+ *  Создается / открывается БД (класс ControlSQL)
+ *  Читаются данные из таблицы (проверочный(ые) код(ы))
+ *  Вычисляются проверочные коды из содержимого сайта
+ *  Если коды совпадают или невозможно получить данные из сети, данное активити передает управление MainActivity
+ *  Если коды не совпадают и  сайт доступен, происходит вычисление и загрузка различающихся данных в локальную базу
+ *  Далее переход к MainActivity
+ */
                 try {
                     synchronized (this){
                        long t_start = System.currentTimeMillis();
-                        InitDB();
+//                        InitDB();
                         long t_delta = System.currentTimeMillis() - t_start;
                         Log.i(TAG, "OnCreate: run: InitDB(): time to init DB: " + String.valueOf(t_delta));
                         wait(5);
@@ -46,9 +49,20 @@ public class Splash extends AppCompatActivity {
         splashThread.start();
     }
 	private void InitDB() {
-        Context ctxt = this;
-        ctxt = getApplicationContext();
-        ControlSQL controlSQL = new ControlSQL(this);
-
+        controlSQL = new ControlSQL(this);
+        controlHTML = new ControlHTML(this);
+        if (controlHTML.getUpdateTime().compareTo(controlSQL.getUpdateTime()) == 1){
+            // время полседнего обновления сайта больше, чем время обновления в БД, значит получаем обновление из Инета и сохраняем их в БД
+            int i = 0;
+            for (CardData cardData: controlHTML.getCurrentCardList()){
+                controlSQL.prepareAllForDelete();
+                for (CardData data : controlSQL.getCurrentCardList()) {
+                    if (cardData.getWebId() == data.getWebId()) {
+                        data.modifyData(cardData);
+                    }
+                }
+                controlSQL.addCard(cardData);
+            }
+        }
     }
 }

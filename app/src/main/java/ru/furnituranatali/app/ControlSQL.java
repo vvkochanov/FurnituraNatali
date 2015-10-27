@@ -8,9 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.sql.*;
+import java.util.*;
 
 /**
  * Created by Vavan on 23.10.2015.
@@ -43,11 +41,13 @@ public class ControlSQL {
     private List<CardData> currentCardList;
     private int currentLevel;
     private int parentIdx;
-	private int updateCode;
-	private Date updateTime;
+
+    private int updateCode;
+
+    private Date updateTime;
     private boolean isSyncDB;
-	
     private SQL_Helper helper;
+
     private Context context;
 //    private SQLiteDatabase catalogDB;
 
@@ -75,13 +75,10 @@ public class ControlSQL {
         /**
          * Проверка таблицы codes
          */
-//        SQLiteDatabase readDB = helper.getReadableDatabase();
         SQLiteDatabase writeDB = helper.getWritableDatabase();
         Cursor cursor;
         cursor = writeDB.query(DB_TBL_CODES, new String[]{TBL_FIELD_CODE, TBL_FIELD_UPD_TIME}, null, null, null, null, null);
         if (cursor.getCount() == 0) {
-//            readDB.close();
-
             ContentValues val = new ContentValues();
             val.put(TBL_FIELD_CODE, 0);
             long curTime = System.currentTimeMillis() / 1000;
@@ -92,11 +89,8 @@ public class ControlSQL {
         /**
          * Проверка таблицы catalogs
          */
-//        writeDB = helper.getReadableDatabase();
         cursor = writeDB.query(DB_TBL_CATALOGS, new String[]{SQL_Helper._ID, TBL_FIELD_CAPTION}, null, null, null, null, null);
         if (cursor.getCount() == 0) {
-//            readDB.close();
-//            SQLiteDatabase writeDB = helper.getWritableDatabase();
             ContentValues val = new ContentValues();
             val.put(TBL_FIELD_CAPTION, context.getString(R.string.str_item0));
             writeDB.insert(DB_TBL_CATALOGS, TBL_FIELD_CAPTION, val);
@@ -105,25 +99,30 @@ public class ControlSQL {
     }
 
     public void setCurrentCardList() {
-        if (helper != null){
-            SQLiteDatabase readCatalogDB = helper.getReadableDatabase();
-            if (currentCardList == null) currentCardList = new ArrayList<>();
-            /**
-             *  выборка значений для текущего отображения, в соответствии с уровнем и выбранным элементом верхнего уровня (если есть)
-             */
-			
-            String nameTable = DB_TBL_CATALOGS;
-            if (currentLevel > 0 && parentIdx < currentCardList.size()) {
-                /**
-                 * нужно найти все значения в таблицах, связанные с индексом указанным в CardData
-                 * с номером parentIdx
-                 */
-            }
-            readCatalogDB.beginTransaction();
-            Cursor cursor = readCatalogDB.query(nameTable, new String[] {"*"}, null, null, null, null, null);
+    }
 
-            readCatalogDB.endTransaction();
+    /**
+     * Метод помечающий все элементы списка признаком "на удаление"
+     */
+    public void prepareAllForDelete() {
+        for (CardData data : currentCardList) {
+            data.prepareForDelete();
         }
+    }
+    public int getUpdateCode() {
+        return updateCode;
+    }
+
+    public void setUpdateCode(int updateCode) {
+        this.updateCode = updateCode;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public void levelUp() {
