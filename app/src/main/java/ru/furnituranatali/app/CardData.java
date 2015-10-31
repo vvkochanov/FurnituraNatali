@@ -24,6 +24,8 @@ public class CardData {
     private int count;
     private boolean isProduct;
     private int childCardsCount;
+	private String imagePath;
+	private String imageWEBlink;
 
     /**
       * статический класс Builder, под названием Set_ID_Caption для удобного добавления к конструктору
@@ -43,6 +45,9 @@ public class CardData {
         private float sale = 0;
         private int count = 0;
         private int childCardsCount = 0;
+		private String imagePath = null;
+		private String imageWEBlink = null;
+		
         public Set_ID_Caption(int id, String caption){
             this.id = id;
             this.caption = caption;
@@ -82,6 +87,14 @@ public class CardData {
             this.childCardsCount = childCardsCount;
             return this;
         }
+		public Set_ID_Caption setImagePath(String path) {
+			this.imagePath = path;
+			return this;
+		}
+		public Set_ID_Caption setImageLink(String link) {
+			this.imageWEBlink = link;
+			return this;
+		}
         public CardData build(){
             return new CardData(this);
         }

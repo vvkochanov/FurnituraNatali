@@ -49,11 +49,15 @@ public class Splash extends AppCompatActivity {
         splashThread.start();
     }
 	private void InitDB() {
+
         controlSQL = new ControlSQL(this);
         controlHTML = new ControlHTML(this);
         if (controlHTML.getUpdateTime().compareTo(controlSQL.getUpdateTime()) == 1){
-            // время полседнего обновления сайта больше, чем время обновления в БД, значит получаем обновление из Инета и сохраняем их в БД
-            int i = 0;
+            /**
+			 * время последнего обновления сайта больше, чем время обновления в БД, 
+			 * значит получаем обновление из Инета и сохраняем их в БД
+			 */
+          
             for (CardData cardData: controlHTML.getCurrentCardList()){
                 controlSQL.prepareAllForDelete();
                 for (CardData data : controlSQL.getCurrentCardList()) {
