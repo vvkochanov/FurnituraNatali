@@ -111,18 +111,20 @@ public class CardData {
          this.count = builder.count;
          this.isProduct = price > 0 | sale > 0;
          this.childCardsCount = builder.childCardsCount;
+         this.imagePath = builder.imagePath;
+         this.imageWEBlink = builder.imageWEBlink;
 
      }
-// следующие конструкторы возможно похерим
-     public CardData(boolean isProduct, String caption) {
-         this(isProduct, 0, caption, null);
-    }
-    public CardData( boolean isProduct, int id, String caption, String captionLong) {
-        this.isProduct = isProduct;
-        this.id = id;
-        this.caption = caption;
-        this.captionLong = captionLong;
-    }
+//// следующие конструкторы возможно похерим
+//     public CardData(boolean isProduct, String caption) {
+//         this(isProduct, 0, caption, null);
+//    }
+//    public CardData( boolean isProduct, int id, String caption, String captionLong) {
+//        this.isProduct = isProduct;
+//        this.id = id;
+//        this.caption = caption;
+//        this.captionLong = captionLong;
+//    }
 // далее идут сеттеры и геттеры для параметров
     public void setCaption(String caption) {
         this.caption = caption;
@@ -145,6 +147,14 @@ public class CardData {
 //
 //    }
 
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public void setImageWEBlink(String imageWEBlink) {
+        this.imageWEBlink = imageWEBlink;
+    }
+
     public void modifyData(CardData cardData) {
         this.caption = cardData.caption;
         this.captionLong = cardData.captionLong;
@@ -156,6 +166,8 @@ public class CardData {
         this.count = cardData.count;
         this.isProduct = cardData.isProduct;
         this.childCardsCount = cardData.childCardsCount;
+        this.imageWEBlink = cardData.imageWEBlink;
+        this.imagePath = cardData.imagePath;
     }
 
 

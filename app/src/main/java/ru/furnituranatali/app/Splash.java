@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.concurrent.TimeUnit;
+
 public class Splash extends AppCompatActivity {
 
     private static final String TAG = "FN_App: Splash";
@@ -16,6 +18,7 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);
+
         Thread splashThread = new Thread(){
             @Override
             public void run() {
@@ -31,22 +34,30 @@ public class Splash extends AppCompatActivity {
  */
                 try {
                     synchronized (this){
-                       long t_start = System.currentTimeMillis();
+                        Log.i(TAG, "try: Start splashThread " + this.getClass().getSimpleName());
+//                       long t_start = System.currentTimeMillis();
 //                        InitDB();
-                        long t_delta = System.currentTimeMillis() - t_start;
-                        Log.i(TAG, "OnCreate: run: InitDB(): time to init DB: " + String.valueOf(t_delta));
-                        wait(5);
+//                        long t_delta = System.currentTimeMillis() - t_start;
+//                        Log.i(TAG, "OnCreate: run: InitDB(): time to init DB: " + String.valueOf(t_delta));
+                        wait(5000);
                     }
                 }catch (InterruptedException e){} 
 				finally {
-                    Intent intent = new Intent();
-                    intent.setClass(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
+                    Log.i(TAG, "finally: Finish splashThread");
+//                    Intent intent = new Intent();
+////                    intent.setClass(getApplicationContext(), MainActivity.class);
+//                    startActivity(intent);
                     finish();
                 }
             }
         };
         splashThread.start();
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.i(TAG, "Continue in Splash.run " + this.getClass().getSimpleName());
     }
 	private void InitDB() {
 
@@ -57,7 +68,7 @@ public class Splash extends AppCompatActivity {
 			 * время последнего обновления сайта больше, чем время обновления в БД, 
 			 * значит получаем обновление из Инета и сохраняем их в БД
 			 */
-          
+            controlHTML.receiveFromWEB(0);
             for (CardData cardData: controlHTML.getCurrentCardList()){
                 controlSQL.prepareAllForDelete();
                 for (CardData data : controlSQL.getCurrentCardList()) {
