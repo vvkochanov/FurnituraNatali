@@ -37,6 +37,12 @@ public class Splash extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         progressBar.setVisibility(ProgressBar.VISIBLE);
+		//TODO: запускаем сервис
+		serviceRunIs = SVC_IN_PROGRESS;
+		//TODO: далее запускаем поток с таймером на 3 сек.
+		// после окончания таймера проверяется знач. перем. serviceRunIs
+		// если  все еще InProgress, то 
+		//TODO: отправить широковещ. сообщ. о том, что сервис не ответил вовремя
 /**
  *  --------------- ОПИСАНИЕ ЛОГИКИ ----------------------
  *  Создается / открывается БД (класс ControlSQL)
