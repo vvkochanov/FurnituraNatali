@@ -5,24 +5,38 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import java.util.concurrent.TimeUnit;
 
 public class Splash extends AppCompatActivity {
 
     private static final String TAG = "FN_App: Splash";
+    private static final int SPLASH_LAYOUT = R.layout.activity_splash;
+    private static final String SVC_FINISH_SUCCESS = "success";
+    private static final String SVC_FINISH_ERROR = "error";
+    private static final String SVC_IN_PROGRESS = "in progress";
+
+    private String serviceRunIs; // флаговая переменная определяющая состояние сервиса: завершен удачно, не удачно и в процессе выполнения
     private ControlSQL controlSQL;
     private ControlHTML controlHTML;
+    private ProgressBar progressBar;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);
+        setContentView(SPLASH_LAYOUT);
 
-        Thread splashThread = new Thread(){
-            @Override
-            public void run() {
-                super.run();
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        progressBar.setVisibility(ProgressBar.VISIBLE);
 /**
  *  --------------- ОПИСАНИЕ ЛОГИКИ ----------------------
  *  Создается / открывается БД (класс ControlSQL)
@@ -32,6 +46,10 @@ public class Splash extends AppCompatActivity {
  *  Если коды не совпадают и  сайт доступен, происходит вычисление и загрузка различающихся данных в локальную базу
  *  Далее переход к MainActivity
  */
+        Thread splashThread = new Thread(){
+            @Override
+            public void run() {
+                super.run();
                 try {
                     synchronized (this){
                         Log.i(TAG, "try: Start splashThread " + this.getClass().getSimpleName());
@@ -58,6 +76,7 @@ public class Splash extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.i(TAG, "Continue in Splash.run " + this.getClass().getSimpleName());
+
     }
 	private void InitDB() {
 
