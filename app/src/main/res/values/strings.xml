@@ -15,6 +15,11 @@
     <string name="str_web_site_http">http://furnituranatali.ru/products</string>
     <string name="str_web_site_text">Каталог товара</string>
 	<string name="str_extra_content_xml">ru.furnitura.contentXML</string>
+    <string name="extraStartDownLvl">StartDownloadLevel</string>
+    <string name="extraSplashResult">Splash Result</string>
+    <string name="svcInProgress">Service in progress</string>
+    <string name="svcFinishError">Service finish with error</string>
+    <string name="svcFinishSuccess">Service finish successful</string>
 </resources>
 
 

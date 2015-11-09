@@ -1,5 +1,6 @@
 package ru.furnituranatali.app;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +14,12 @@ public class Splash extends AppCompatActivity {
 
     private static final String TAG = "FN_App: Splash";
     private static final int SPLASH_LAYOUT = R.layout.activity_splash;
-    private static final String SVC_FINISH_SUCCESS = "success";
-    private static final String SVC_FINISH_ERROR = "error";
-    private static final String SVC_IN_PROGRESS = "in progress";
 
     private String serviceRunIs; // флаговая переменная определяющая состояние сервиса: завершен удачно, не удачно и в процессе выполнения
     private ControlSQL controlSQL;
     private ControlHTML controlHTML;
     private ProgressBar progressBar;
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onPause() {
@@ -29,20 +28,6 @@ public class Splash extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.SplashTheme);
-        super.onCreate(savedInstanceState);
-        setContentView(SPLASH_LAYOUT);
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-		//TODO: запускаем сервис
-		serviceRunIs = SVC_IN_PROGRESS;
-		//TODO: далее запускаем поток с таймером на 3 сек.
-		// после окончания таймера проверяется знач. перем. serviceRunIs
-		// если  все еще InProgress, то 
-		//TODO: отправить широковещ. сообщ. о том, что сервис не ответил вовремя
 /**
  *  --------------- ОПИСАНИЕ ЛОГИКИ ----------------------
  *  Создается / открывается БД (класс ControlSQL)
@@ -52,6 +37,26 @@ public class Splash extends AppCompatActivity {
  *  Если коды не совпадают и  сайт доступен, происходит вычисление и загрузка различающихся данных в локальную базу
  *  Далее переход к MainActivity
  */
+    protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.SplashTheme);
+        super.onCreate(savedInstanceState);
+        setContentView(SPLASH_LAYOUT);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+        /**
+         * запускаем сервис
+         * далее запускаем поток с таймером на 3 сек.
+         * после окончания таймера проверяется знач. перем. serviceRunIs
+         * если  все еще InProgress, то
+         * отправить широковещ. сообщ. о том, что сервис не ответил вовремя
+         */
+
+        Intent intentToSVC = new Intent(this, ServiceWEB_SQL.class);
+        startService(intentToSVC.putExtra(getString(R.string.extraStartDownLvl), 0));
+		serviceRunIs = getString(R.string.svcInProgress);
+
         Thread splashThread = new Thread(){
             @Override
             public void run() {
@@ -59,30 +64,23 @@ public class Splash extends AppCompatActivity {
                 try {
                     synchronized (this){
                         Log.i(TAG, "try: Start splashThread " + this.getClass().getSimpleName());
-//                       long t_start = System.currentTimeMillis();
-//                        InitDB();
-//                        long t_delta = System.currentTimeMillis() - t_start;
-//                        Log.i(TAG, "OnCreate: run: InitDB(): time to init DB: " + String.valueOf(t_delta));
-                        wait(5000);
+                        while (serviceRunIs == getString(R.string.svcInProgress)) {
+                            serviceRunIs = getString(R.string.svcFinishError);
+                            wait(1000);
+                        }
                     }
                 }catch (InterruptedException e){} 
 				finally {
                     Log.i(TAG, "finally: Finish splashThread");
-//                    Intent intent = new Intent();
-////                    intent.setClass(getApplicationContext(), MainActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), MainActivity.class);
+                    intent.putExtra(getString(R.string.extraSplashResult), serviceRunIs);
+                    startActivity(intent);
                     finish();
                 }
             }
         };
         splashThread.start();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Log.i(TAG, "Continue in Splash.run " + this.getClass().getSimpleName());
-
     }
 	private void InitDB() {
 
