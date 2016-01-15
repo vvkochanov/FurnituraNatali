@@ -12,10 +12,11 @@
     <string name="str_navview_headlogo">NavViewLogo</string>
     <string name="str_navview_headcaption">Каталог товаров</string>
     <string name="str_card_text">Текст карточки</string>
-    <string name="str_web_site_http">http://furnituranatali.ru/products</string>
-    <string name="str_web_site_text">Каталог товара</string>
+    <string name="str_web_root_http">http://furnituranatali.ru</string>
+    <string name="str_web_main_catalog_http">/catalog</string>
+    <string name="str_web_main_catalog_text">Каталог товара</string>
 	<string name="str_extra_content_xml">ru.furnitura.contentXML</string>
-    <string name="extraStartDownLvl">StartDownloadLevel</string>
+    <string name="extraStartDownLvl">Start Download Level</string>
     <string name="extraSplashResult">Splash Result</string>
     <string name="svcInProgress">Service in progress</string>
     <string name="svcFinishError">Service finish with error</string>
